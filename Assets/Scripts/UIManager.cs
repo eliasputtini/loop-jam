@@ -10,20 +10,21 @@ public class UIManager : MonoBehaviour
     public Image fuelImageProgressBar;
     public Gradient fuelGradient;
     public Image lowFuelWarning;
-    public Image pauseButtonBg;
+
     public Text distanceCounter;
     public Text boostCounter;
     public Text rpmCounter;
     public Text fuelCounter;
 
     public CollectiblesManager collectiblesManager;
-    private Vector3 _startPosition; 
+    private Vector3 _startPosition;
     public Button sfxButton;
     public Sprite sfxButtonOn;
     public Sprite sfxButtonOff;
     public AudioManager audioManager;
     public Image coinSprite;
-    private bool _a = true;
+    private bool _isPaused = false;
+    private bool _gameOver = false;
 
     public Text timerText;
 
@@ -60,16 +61,20 @@ public class UIManager : MonoBehaviour
     /// </returns>
     private void Update()
     {
+        // Detecta se a tecla ESC foi pressionada
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();
+        }
+
         CheckLowFuelWarning();
 
         UpdateFuelGUI();
 
-        UpdateRpmCounter(); 
+        UpdateRpmCounter();
 
         UpdateScore();
     }
-
-  
 
     private void UpdateRpmCounter()
     {
@@ -142,25 +147,36 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This method is responsible for pausing the game. It toggles the Time.timeScale between 0 and 1. Called when the pause button is clicked.
+    /// This method is responsible for pausing the game. It toggles the Time.timeScale between 0 and 1. Called when ESC key is pressed.
+    /// Only works if the game is not over.
     /// </summary>
     /// <returns>
     /// void
     /// </returns>
     public void PauseGame()
     {
-        if (_a)
+        // Só permite pausar se o jogo não acabou
+        if (_gameOver) return;
+
+        if (!_isPaused)
         {
             Time.timeScale = 0;
-            pauseButtonBg.color = new Color(1f, 0, 0, 1f);
-            _a = false;
+            _isPaused = true;
         }
         else
         {
             Time.timeScale = 1;
-            pauseButtonBg.color = new Color(1, 1f, 1, 1f);
-            _a = true;
+            _isPaused = false;
         }
+    }
+
+    /// <summary>
+    /// Call this method when the game ends (time runs out, fuel runs out, etc.)
+    /// </summary>
+    public void SetGameOver()
+    {
+        _gameOver = true;
+        _isPaused = false; // Garante que não está pausado quando o jogo acaba
     }
 
     private void UpdateFuelGUI()

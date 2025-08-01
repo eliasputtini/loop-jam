@@ -47,6 +47,7 @@ public class CollectiblesManager : MonoBehaviour
         {
             timerRunning = false;
             EnterSlowMotion();
+            uiManager.SetGameOver(); // Informa ao UIManager que o jogo acabou
         }
 
         uiManager.UpdateTimerUI(timeLeft); // assumes you have a method for this
