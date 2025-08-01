@@ -64,16 +64,12 @@ public class UIManager : MonoBehaviour
 
         UpdateFuelGUI();
 
-        UpdateRpmCounter();
-        UpdateBoostCounter();
+        UpdateRpmCounter(); 
 
         UpdateScore();
     }
 
-    private void UpdateBoostCounter()
-    {
-        boostCounter.text = Mathf.Abs(collectiblesManager.carBody.linearVelocity.magnitude * .5f).ToString("F0");
-    }
+  
 
     private void UpdateRpmCounter()
     {
