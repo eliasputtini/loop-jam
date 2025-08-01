@@ -9,8 +9,8 @@ public class CoinSpawner : MonoBehaviour
     public int maxCoinsOnScreen = 25;
 
     [Header("Spawn Timing")]
-    public float minSpawnInterval = 0.5f;  // Minimum seconds between spawns
-    public float maxSpawnInterval = 1.5f;  // Maximum seconds between spawns
+    public float minSpawnInterval = 0.3f;  // Reduced for more frequent spawning
+    public float maxSpawnInterval = 0.8f;  // Reduced for more frequent spawning
 
     [Header("Spawn Position")]
     public float spawnDistanceRight = 15f; // How far right of screen to spawn
@@ -22,13 +22,16 @@ public class CoinSpawner : MonoBehaviour
     [Header("References")]
     public Camera mainCamera;
 
+    [Header("Debug")]
+    public bool showDebugInfo = true;
+
     private List<GameObject> activeCoinPool = new List<GameObject>();
     private List<GameObject> inactiveCoinPool = new List<GameObject>();
     private Coroutine spawnCoroutine;
 
     void Start()
     {
-        // Pre-instantiate coin pool
+        // Pre-instantiate coin pool with extra coins for safety
         InitializeCoinPool();
 
         // Start spawning coins
@@ -38,6 +41,11 @@ public class CoinSpawner : MonoBehaviour
     void Update()
     {
         RecycleCoinsOffScreen();
+
+        if (showDebugInfo)
+        {
+            DebugPoolStatus();
+        }
     }
 
     void InitializeCoinPool()
@@ -48,43 +56,54 @@ public class CoinSpawner : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < maxCoinsOnScreen; i++)
+        // Create 50% more coins than max to ensure we never run out
+        int poolSize = Mathf.RoundToInt(maxCoinsOnScreen * 1.5f);
+
+        for (int i = 0; i < poolSize; i++)
         {
             GameObject prefab = GetRandomCoinPrefab();
             GameObject coin = Instantiate(prefab);
             coin.SetActive(false);
             inactiveCoinPool.Add(coin);
         }
+
+        Debug.Log($"CoinSpawner: Initialized pool with {poolSize} coins");
     }
 
     IEnumerator SpawnCoinRoutine()
     {
         while (true)
         {
-            // Wait for random interval
-            float waitTime = Random.Range(minSpawnInterval, maxSpawnInterval);
-            yield return new WaitForSeconds(waitTime);
+            // Clean up any null references first
+            CleanupPools();
 
-            // Spawn coin if we have available coins in pool
+            // Spawn coin if we have available coins and haven't reached the limit
             if (inactiveCoinPool.Count > 0 && activeCoinPool.Count < maxCoinsOnScreen)
             {
                 SpawnCoin();
             }
+            else if (inactiveCoinPool.Count == 0)
+            {
+                // Emergency: Create more coins if we somehow ran out
+                Debug.LogWarning("CoinSpawner: No inactive coins available, creating emergency coin!");
+                CreateEmergencyCoin();
+            }
+
+            // Wait for random interval
+            float waitTime = Random.Range(minSpawnInterval, maxSpawnInterval);
+            yield return new WaitForSeconds(waitTime);
         }
     }
 
     void SpawnCoin()
     {
-        // Limpa possíveis referências nulas/destroídas na inactiveCoinPool
-        inactiveCoinPool.RemoveAll(coin => coin == null);
-
         if (inactiveCoinPool.Count == 0)
         {
             Debug.LogWarning("No inactive coins available to spawn!");
             return;
         }
 
-        // Pega o primeiro coin válido
+        // Get the first available coin
         GameObject coin = inactiveCoinPool[0];
         inactiveCoinPool.RemoveAt(0);
         activeCoinPool.Add(coin);
@@ -94,6 +113,23 @@ public class CoinSpawner : MonoBehaviour
         coin.SetActive(true);
     }
 
+    void CreateEmergencyCoin()
+    {
+        GameObject prefab = GetRandomCoinPrefab();
+        if (prefab != null)
+        {
+            GameObject coin = Instantiate(prefab);
+            coin.SetActive(false);
+            inactiveCoinPool.Add(coin);
+        }
+    }
+
+    void CleanupPools()
+    {
+        // Remove null references from both pools
+        activeCoinPool.RemoveAll(coin => coin == null);
+        inactiveCoinPool.RemoveAll(coin => coin == null);
+    }
 
     Vector3 GetRandomSpawnPosition()
     {
@@ -117,7 +153,7 @@ public class CoinSpawner : MonoBehaviour
         Vector3 leftEdgeWorld = mainCamera.ViewportToWorldPoint(new Vector3(0f, 0.5f, mainCamera.nearClipPlane));
         float despawnX = leftEdgeWorld.x - despawnDistanceLeft;
 
-        // Check active coins for recycling
+        // Check active coins for recycling (iterate backwards to safely remove items)
         for (int i = activeCoinPool.Count - 1; i >= 0; i--)
         {
             GameObject coin = activeCoinPool[i];
@@ -153,6 +189,15 @@ public class CoinSpawner : MonoBehaviour
         if (index >= 0)
         {
             RecycleCoin(coin, index);
+        }
+    }
+
+    void DebugPoolStatus()
+    {
+        // Display pool status every few seconds
+        if (Time.frameCount % 180 == 0) // Every 3 seconds at 60fps
+        {
+            Debug.Log($"Coin Pool Status - Active: {activeCoinPool.Count}, Inactive: {inactiveCoinPool.Count}, Max: {maxCoinsOnScreen}");
         }
     }
 
