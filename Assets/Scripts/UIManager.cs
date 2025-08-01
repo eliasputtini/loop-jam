@@ -136,8 +136,9 @@ public class UIManager : MonoBehaviour
     /// </returns>
     public static void RestartLevel()
     {
+        Time.timeScale = 1f; // Restaura o tempo normal
+        Time.fixedDeltaTime = 0.02f; // Valor padrão do Unity para física
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        Time.timeScale = 1;
     }
 
     /// <summary>
