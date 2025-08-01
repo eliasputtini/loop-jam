@@ -120,6 +120,12 @@ public class UIManager : MonoBehaviour
         }
 
         _lastPosition = currentPos;
+
+        if (score > PlayerPrefs.GetFloat("HighScore", 0f))
+        {
+            PlayerPrefs.SetFloat("HighScore", score);
+            PlayerPrefs.Save();
+        }
     }
 
     /// <summary>
@@ -171,5 +177,10 @@ public class UIManager : MonoBehaviour
     {
         sfxButton.image.sprite = sfxButton.image.sprite == sfxButtonOn ? sfxButtonOff : sfxButtonOn;
         audioManager.ToggleAllSfx();
+    }
+
+    public float GetHighScore()
+    {
+        return PlayerPrefs.GetFloat("HighScore", 0f);
     }
 }

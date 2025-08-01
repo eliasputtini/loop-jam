@@ -28,6 +28,9 @@ public class CollectiblesManager : MonoBehaviour
     public GameObject textPrefab; // Assign a TextMeshPro prefab in the inspector
     public Canvas worldCanvas; // Assign your world space canvas
 
+    [Header("Game Over UI")]
+    public GameObject gameOverUI;
+
     private bool timerRunning = true;
     private HashSet<GameObject> collectedItems = new HashSet<GameObject>(); // Track collected items
 
@@ -40,11 +43,12 @@ public class CollectiblesManager : MonoBehaviour
     private void Update()
     {
         fuel -= (Mathf.Clamp(Mathf.Abs(carBody.linearVelocity.x), 0, 0.8f) * Time.deltaTime * 2.5f) * 2;
-        if (timeLeft <= 0)
+        if (timeLeft <= 0 && timerRunning)
         {
             timerRunning = false;
-            Invoke(nameof(RestartLevel), 1f);
+            EnterSlowMotion();
         }
+
         uiManager.UpdateTimerUI(timeLeft); // assumes you have a method for this
     }
 
@@ -170,4 +174,24 @@ public class CollectiblesManager : MonoBehaviour
         }
         Destroy(obj, 1f);
     }
+    private void EnterSlowMotion()
+    {
+        Time.timeScale = 0.1f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
+        StartCoroutine(ShowGameOverUIAfterDelay(3f));
+    }
+
+    private IEnumerator ShowGameOverUIAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+
+        Time.timeScale = 0f; // Pausa o jogo completamente depois da transição
+
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true); // Ativa o Canvas ou painel de Game Over
+        }
+    }
+
 }
