@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro; // Add this for TextMeshPro
 
 /// <summary>
 /// This class is in charge of managing the collectibles in the game, including fuel, coins and their respective animations when collected.
@@ -22,7 +24,12 @@ public class CollectiblesManager : MonoBehaviour
     public AudioManager audioManager;
     public UIManager uiManager;
 
+    [Header("Text Effect Settings")]
+    public GameObject textPrefab; // Assign a TextMeshPro prefab in the inspector
+    public Canvas worldCanvas; // Assign your world space canvas
+
     private bool timerRunning = true;
+    private HashSet<GameObject> collectedItems = new HashSet<GameObject>(); // Track collected items
 
     private void Start()
     {
@@ -38,8 +45,6 @@ public class CollectiblesManager : MonoBehaviour
             timerRunning = false;
             Invoke(nameof(RestartLevel), 1f);
         }
-
-
         uiManager.UpdateTimerUI(timeLeft); // assumes you have a method for this
     }
 
@@ -61,34 +66,88 @@ public class CollectiblesManager : MonoBehaviour
     {
         if (other.CompareTag("Fuel"))
         {
+            other.enabled = false; // Disable collider immediately
             fuel = 100f;
             audioManager.PlayOneShotRefuel();
             StartCoroutine(MakeObjectFloatAwayAndFadeOut(other.gameObject));
         }
         else if (other.CompareTag("Coin500")) // adds 5 seconds
         {
+            other.enabled = false; // Disable collider immediately
             timeLeft += 5;
-            audioManager.PlayOneShotCoinSound(); 
+            audioManager.PlayOneShotCoinSound();
+            SpawnFloatingText("+5s", other.transform.position);
             StartCoroutine(MakeObjectFloatAwayAndFadeOut(other.gameObject));
         }
-        else if (other.CompareTag("Coin100")) // adds 5 seconds
+        else if (other.CompareTag("Coin100")) // adds 3 seconds
         {
+            other.enabled = false; // Disable collider immediately
             timeLeft += 3;
-            audioManager.PlayOneShotCoinSound(); 
+            audioManager.PlayOneShotCoinSound();
+            SpawnFloatingText("+3s", other.transform.position);
             StartCoroutine(MakeObjectFloatAwayAndFadeOut(other.gameObject));
         }
         else if (other.CompareTag("Coin25"))
         {
+            other.enabled = false; // Disable collider immediately
             timeLeft += 2;
-            audioManager.PlayOneShotCoinSound(); 
+            audioManager.PlayOneShotCoinSound();
+            SpawnFloatingText("+2s", other.transform.position);
             StartCoroutine(MakeObjectFloatAwayAndFadeOut(other.gameObject));
         }
         else if (other.CompareTag("Coin5"))
         {
+            other.enabled = false; // Disable collider immediately
             timeLeft += 1;
-            audioManager.PlayOneShotCoinSound(); 
+            audioManager.PlayOneShotCoinSound();
+            SpawnFloatingText("+1s", other.transform.position);
             StartCoroutine(MakeObjectFloatAwayAndFadeOut(other.gameObject));
         }
+    }
+
+    private void SpawnFloatingText(string text, Vector3 position)
+    {
+        if (textPrefab == null || worldCanvas == null) return;
+
+        GameObject textObj = Instantiate(textPrefab, worldCanvas.transform);
+        textObj.transform.position = position;
+
+        TextMeshProUGUI textComponent = textObj.GetComponent<TextMeshProUGUI>();
+        if (textComponent != null)
+        {
+            textComponent.text = text;
+        }
+
+        StartCoroutine(FloatingTextEffect(textObj));
+    }
+
+    private static IEnumerator FloatingTextEffect(GameObject textObj)
+    {
+        const float duration = 1.5f;
+        float elapsedTime = 0f;
+        Vector3 startPosition = textObj.transform.position;
+        Vector3 endPosition = startPosition + Vector3.up * 2f; // Float up by 2 units
+
+        TextMeshProUGUI textComponent = textObj.GetComponent<TextMeshProUGUI>();
+        Color originalColor = textComponent.color;
+
+        while (elapsedTime < duration)
+        {
+            float progress = elapsedTime / duration;
+
+            // Move up with easing
+            textObj.transform.position = Vector3.Lerp(startPosition, endPosition, progress);
+
+            // Fade out
+            Color color = originalColor;
+            color.a = Mathf.Lerp(1f, 0f, progress);
+            textComponent.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(textObj);
     }
 
     private static IEnumerator MakeObjectFloatAwayAndFadeOut(GameObject obj)
@@ -103,15 +162,12 @@ public class CollectiblesManager : MonoBehaviour
         {
             var newY = Mathf.Lerp(startPosition.y, endPosition.y, elapsedTime / duration);
             obj.transform.position = new Vector3(obj.transform.position.x, newY, obj.transform.position.z);
-
             var color = spriteRenderer.color;
             color.a = Mathf.Lerp(1f, 0f, elapsedTime / duration);
             spriteRenderer.color = color;
-
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         Destroy(obj, 1f);
     }
 }

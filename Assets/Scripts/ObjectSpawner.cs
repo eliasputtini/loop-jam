@@ -75,18 +75,25 @@ public class CoinSpawner : MonoBehaviour
 
     void SpawnCoin()
     {
-        // Get coin from inactive pool
+        // Limpa possíveis referências nulas/destroídas na inactiveCoinPool
+        inactiveCoinPool.RemoveAll(coin => coin == null);
+
+        if (inactiveCoinPool.Count == 0)
+        {
+            Debug.LogWarning("No inactive coins available to spawn!");
+            return;
+        }
+
+        // Pega o primeiro coin válido
         GameObject coin = inactiveCoinPool[0];
         inactiveCoinPool.RemoveAt(0);
         activeCoinPool.Add(coin);
 
-        // Position coin
         Vector3 spawnPosition = GetRandomSpawnPosition();
         coin.transform.position = spawnPosition;
-
-        // Activate coin
         coin.SetActive(true);
     }
+
 
     Vector3 GetRandomSpawnPosition()
     {

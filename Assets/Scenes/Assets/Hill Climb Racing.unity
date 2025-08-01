@@ -210,11 +210,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4724502476182591110, guid: 7da535284c6cf9a4f8348a3d82655cbb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.94
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4724502476182591110, guid: 7da535284c6cf9a4f8348a3d82655cbb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.986283
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4724502476182591110, guid: 7da535284c6cf9a4f8348a3d82655cbb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -280,6 +280,7 @@ GameObject:
   - component: {fileID: 198200144}
   - component: {fileID: 198200147}
   - component: {fileID: 198200146}
+  - component: {fileID: 198200152}
   - component: {fileID: 198200148}
   - component: {fileID: 198200149}
   - component: {fileID: 198200150}
@@ -618,6 +619,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &198200152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198200143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63fb96edac5ff149b4c5e3adbdfb947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuel: 100
+  fuelDrainRate: 2.5
+  carBody: {fileID: 0}
 --- !u!1 &236228265
 GameObject:
   m_ObjectHideFlags: 0
@@ -3492,6 +3508,7 @@ RectTransform:
   - {fileID: 83645311}
   - {fileID: 1505645510}
   - {fileID: 688721529}
+  - {fileID: 1765864117}
   - {fileID: 1096059350}
   - {fileID: 552162085}
   - {fileID: 2028034026}
@@ -3568,6 +3585,11 @@ MonoBehaviour:
   audioManager: {fileID: 1699387075}
   coinSprite: {fileID: 0}
   timerText: {fileID: 1210794098}
+  scoreCounter: {fileID: 1765864115}
+  normalScoreColor: {r: 1, g: 1, b: 1, a: 1}
+  highVelocityColor: {r: 0.6039216, g: 0.8039216, b: 0.1960784, a: 1}
+  normalFontSize: 24
+  highVelocityFontSize: 28
 --- !u!1 &1471870444
 GameObject:
   m_ObjectHideFlags: 0
@@ -4266,6 +4288,85 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1765864114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1765864117}
+  - component: {fileID: 1765864116}
+  - component: {fileID: 1765864115}
+  m_Layer: 5
+  m_Name: Score Counter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1765864115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765864114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 26
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 0
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Score: 0'
+--- !u!222 &1765864116
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765864114}
+  m_CullTransparentMesh: 1
+--- !u!224 &1765864117
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765864114}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1461631366}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 39.96501, y: 153.8}
+  m_SizeDelta: {x: 169.53, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1831071689
 GameObject:
   m_ObjectHideFlags: 0
@@ -4410,19 +4511,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3a9230fbf4cbe4aaa64b3d70709948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabs:
+  coinPrefabs:
   - {fileID: 9060552529771043389, guid: 7d7588dc09164014e870ae3032dc75e1, type: 3}
   - {fileID: 2211610770073890618, guid: beb962a5a438c2743ae83239a0ce7ded, type: 3}
   - {fileID: 8342559024264842136, guid: b4648d9e507990d42bcb9c31840fedd2, type: 3}
   - {fileID: 8439530421106599395, guid: 7da535284c6cf9a4f8348a3d82655cbb, type: 3}
   - {fileID: 629634232454622055, guid: 57f4aa066a759894a8d74a9277843aa7, type: 3}
-  poolSize: 5
-  minXOffset: 5
-  maxXOffset: 15
-  minY: -2
-  maxY: 500
-  recycleOffsetX: -2
-  playerCamera: {fileID: 1002175936}
+  maxCoinsOnScreen: 25
+  minSpawnInterval: 1
+  maxSpawnInterval: 2
+  spawnDistanceRight: 15
+  verticalRange: 3
+  despawnDistanceLeft: 10
+  mainCamera: {fileID: 519420034}
 --- !u!1 &1897860633
 GameObject:
   m_ObjectHideFlags: 0
