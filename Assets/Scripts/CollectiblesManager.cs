@@ -19,7 +19,7 @@ public class CollectiblesManager : MonoBehaviour
 {
     public float fuel = 100f;
     public float Fuel => fuel;
-    public float timeLeft = 10f; // start with 10 seconds
+    public float timeLeft = 15f; // start with 15 seconds
     public Rigidbody2D carBody;
     public AudioManager audioManager;
     public UIManager uiManager;
