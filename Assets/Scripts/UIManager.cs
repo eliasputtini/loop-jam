@@ -111,7 +111,7 @@ public class UIManager : MonoBehaviour
         // Add only the incremental distance traveled this frame times velocity
         score += frameDistance * velocity;
 
-        scoreCounter.text = "Score: " + Mathf.RoundToInt(score).ToString();
+        scoreCounter.text = "SCORE: " + Mathf.RoundToInt(score).ToString();
 
         if (velocity > 10f)  // adjust threshold as needed
         {
