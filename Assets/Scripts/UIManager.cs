@@ -10,20 +10,21 @@ public class UIManager : MonoBehaviour
     public Image fuelImageProgressBar;
     public Gradient fuelGradient;
     public Image lowFuelWarning;
-    public Image pauseButtonBg;
+
     public Text distanceCounter;
     public Text boostCounter;
     public Text rpmCounter;
     public Text fuelCounter;
 
     public CollectiblesManager collectiblesManager;
-    private Vector3 _startPosition; 
+    private Vector3 _startPosition;
     public Button sfxButton;
     public Sprite sfxButtonOn;
     public Sprite sfxButtonOff;
     public AudioManager audioManager;
     public Image coinSprite;
-    private bool _a = true;
+    private bool _isPaused = false;
+    private bool _gameOver = false;
 
     public Text timerText;
 
@@ -60,16 +61,20 @@ public class UIManager : MonoBehaviour
     /// </returns>
     private void Update()
     {
+        // Detecta se a tecla ESC foi pressionada
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();
+        }
+
         CheckLowFuelWarning();
 
         UpdateFuelGUI();
 
-        UpdateRpmCounter(); 
+        UpdateRpmCounter();
 
         UpdateScore();
     }
-
-  
 
     private void UpdateRpmCounter()
     {
@@ -77,7 +82,9 @@ public class UIManager : MonoBehaviour
 
         distanceCounter.text = distance.magnitude.ToString("F0") + "m";
 
-        rpmCounter.text = Mathf.Abs(collectiblesManager.carBody.linearVelocity.magnitude * 3).ToString("F0");
+        // Convert velocity from m/s to km/h by multiplying by 3.6
+        float velocityKmh = collectiblesManager.carBody.linearVelocity.magnitude * 3.6f;
+        rpmCounter.text = velocityKmh.ToString("F0") + " km/h";
     }
 
     private void CheckLowFuelWarning()
@@ -106,9 +113,11 @@ public class UIManager : MonoBehaviour
         // Add only the incremental distance traveled this frame times velocity
         score += frameDistance * velocity;
 
-        scoreCounter.text = "Score: " + Mathf.RoundToInt(score).ToString();
+        scoreCounter.text = "SCORE: " + Mathf.RoundToInt(score).ToString();
 
-        if (velocity > 10f)  // adjust threshold as needed
+        // Convert velocity to km/h for the high velocity check
+        float velocityKmh = velocity * 3.6f;
+        if (velocityKmh > 36f)  // 36 km/h (equivalent to 10 m/s)
         {
             scoreCounter.color = highVelocityColor;
             scoreCounter.fontSize = (int)highVelocityFontSize;
@@ -142,25 +151,36 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This method is responsible for pausing the game. It toggles the Time.timeScale between 0 and 1. Called when the pause button is clicked.
+    /// This method is responsible for pausing the game. It toggles the Time.timeScale between 0 and 1. Called when ESC key is pressed.
+    /// Only works if the game is not over.
     /// </summary>
     /// <returns>
     /// void
     /// </returns>
     public void PauseGame()
     {
-        if (_a)
+        // Só permite pausar se o jogo não acabou
+        if (_gameOver) return;
+
+        if (!_isPaused)
         {
             Time.timeScale = 0;
-            pauseButtonBg.color = new Color(1f, 0, 0, 1f);
-            _a = false;
+            _isPaused = true;
         }
         else
         {
             Time.timeScale = 1;
-            pauseButtonBg.color = new Color(1, 1f, 1, 1f);
-            _a = true;
+            _isPaused = false;
         }
+    }
+
+    /// <summary>
+    /// Call this method when the game ends (time runs out, fuel runs out, etc.)
+    /// </summary>
+    public void SetGameOver()
+    {
+        _gameOver = true;
+        _isPaused = false; // Garante que não está pausado quando o jogo acaba
     }
 
     private void UpdateFuelGUI()
