@@ -24,11 +24,10 @@ public class GameOver : MonoBehaviour
 
     public void QuitGame()
     {
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            Application.Quit();
-        #endif
+        // Carrega a cena do menu principal
+        Time.timeScale = 1f; // Também importante garantir que o tempo volte ao normal
+        Time.fixedDeltaTime = 0.02f;
+        SceneManager.LoadScene("MainMenu");
     }
 
 }
