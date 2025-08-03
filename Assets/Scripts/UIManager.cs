@@ -82,7 +82,9 @@ public class UIManager : MonoBehaviour
 
         distanceCounter.text = distance.magnitude.ToString("F0") + "m";
 
-        rpmCounter.text = Mathf.Abs(collectiblesManager.carBody.linearVelocity.magnitude * 3).ToString("F0");
+        // Convert velocity from m/s to km/h by multiplying by 3.6
+        float velocityKmh = collectiblesManager.carBody.linearVelocity.magnitude * 3.6f;
+        rpmCounter.text = velocityKmh.ToString("F0") + " km/h";
     }
 
     private void CheckLowFuelWarning()
@@ -113,7 +115,9 @@ public class UIManager : MonoBehaviour
 
         scoreCounter.text = "SCORE: " + Mathf.RoundToInt(score).ToString();
 
-        if (velocity > 10f)  // adjust threshold as needed
+        // Convert velocity to km/h for the high velocity check
+        float velocityKmh = velocity * 3.6f;
+        if (velocityKmh > 36f)  // 36 km/h (equivalent to 10 m/s)
         {
             scoreCounter.color = highVelocityColor;
             scoreCounter.fontSize = (int)highVelocityFontSize;
