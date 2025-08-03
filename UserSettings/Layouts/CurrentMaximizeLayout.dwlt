@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 131455
+  controlID: 135896
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 131409
+  controlID: 135850
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 131400
+  controlID: 135791
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -244,9 +244,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: a2ba0100
-      m_LastClickedID: 113314
-      m_ExpandedIDs: 8270fbff4076fbffb44ffdff6c53fdffda89fdff6cb9fdffcebcfdffbec1fdff88d9fdffa6ecfdff22f9fdffb2b5feffecfaffff6aaf00001ab00000fa0c01000a0d01004c3701005839010042400100564001003a410100d6ba0100
+      m_SelectedIDs: 201bffff
+      m_LastClickedID: 0
+      m_ExpandedIDs: 5856fbffb05cfbff8270fbff4076fbffb44ffdff6c53fdffda89fdff6cb9fdffcebcfdffbec1fdff88d9fdffa6ecfdff22f9fdffb2b5feffecfaffff6aaf00001ab00000fa0c01000a0d01004c3701005839010042400100564001003a41010026ba0100d6ba0100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -891,9 +891,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 8.985287, y: 2.366573, z: -0.025822474}
+    m_Target: {x: 54.128445, y: 26.087976, z: -0.498901}
     speed: 2
-    m_Value: {x: 8.992118, y: 2.347182, z: -0.026756763}
+    m_Value: {x: 54.128445, y: 26.087976, z: -0.498901}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -943,9 +943,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1.9827844
+    m_Target: 49.29067
     speed: 2
-    m_Value: 2.076214
+    m_Value: 49.29067
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1053,7 +1053,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Assets/Fonts
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1063,16 +1063,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Assets/Fonts
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\Elias\Downloads\Hill-Climb-Racing-main\Hill-Climb-Racing-main
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 9cb20000
-    m_LastClickedID: 45724
-    m_ExpandedIDs: 000000005ab100005cb100000a7301000c73010000ca9a3b
+    m_SelectedIDs: 8eb20000
+    m_LastClickedID: 45710
+    m_ExpandedIDs: 000000005ab100005cb10000a2b200000a7301000c73010000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1127,8 +1127,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: a2ba0100
-    m_LastClickedInstanceID: 113314
+    m_SelectedInstanceIDs: 201bffff
+    m_LastClickedInstanceID: -58592
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300005ccd00000000000018470100
     m_RenameOverlay:
